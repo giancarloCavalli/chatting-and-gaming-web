@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "rimraf ./build && tsc",
-    "start": "yarn build && ./src/index.html"
+    "start": "yarn build && node ./build/app.js"
   },
   "main": "index.js",
   "repository": "https://github.com/giancarloCavalli/chatting-and-gaming-web.git",
