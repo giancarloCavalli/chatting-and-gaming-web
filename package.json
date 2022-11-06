@@ -1,0 +1,10 @@
+{
+  "name": "chatting-and-gaming-web",
+  "version": "1.0.0",
+  "description": "Chatting and gaming app",
+  "main": "index.js",
+  "repository": "https://github.com/giancarloCavalli/chatting-and-gaming-web.git",
+  "author": "Giancarlo Cavalli <gc.giancarloo@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
