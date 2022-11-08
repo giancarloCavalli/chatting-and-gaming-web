@@ -1,34 +1,42 @@
-import { IncomingMessage, ServerResponse } from "http";
-import { createConnection, readMessage, sendMessage } from "./socket.service";
+import { IncomingMessage, ServerResponse, createServer } from "http";
 
-const http = require("http");
+import * as SocketService from "./services/socket.service";
+import * as MessageController from './controllers/message.controller'
 
-const internalHost = 'localhost';
-const internalPort = 8000;
+const port = 1012;
+const host = 'larc.inf.furb.br'
+const socket = SocketService.createConnection(port, host)
 
-const socket = createConnection()
+const requestListener = async function (request: IncomingMessage, response: ServerResponse) {
+  switch (request.url) {
+    case '/messages':
+      await MessageController.resolve(request, response, socket)
+      break;
 
-const requestListener = async function (req: IncomingMessage, res: ServerResponse) {
+    case '/players':
 
-  if (req.url?.includes('messages')) {
-    const message = await readMessage(socket, 3264, 'cvdhl')
+      break;
 
-    res.writeHead(200);
-    res.end(`Received message: ${message}`);
+    case '/users':
 
-  } else if (req.url?.includes('send')) {
-    sendMessage(socket, 3264, 'cvdhl', 3264, 'E aee, belez?')
+      break;
 
-    res.writeHead(200);
-    res.end("Message sent");
-  } else {
-    res.writeHead(200);
-    res.end("Done nothing");
+    case '/cards':
+      
+      break;
+  
+    default:
+      response.writeHead(400);
+      response.end('Resource not found');
+      break;
   }
   
 };
 
-const server = http.createServer(requestListener);
+const server = createServer(requestListener);
+
+const internalHost = 'localhost';
+const internalPort = 8000;
 server.listen(internalPort, internalHost, () => {
     console.log(`Server is running on http://${internalHost}:${internalPort}`);
 });

@@ -2,12 +2,9 @@ import { Socket } from "net";
 
 const net = require('net');
 
-const port = 1012;
-const host = 'larc.inf.furb.br'
-
 let message = ''
 
-export const createConnection = () => {
+export const createConnection = (port: number, host: string) => {
   const socket: Socket = net.createConnection(port, host)
 
   console.log('Socket created.');
@@ -43,7 +40,7 @@ export const readMessage = async (socket: Socket, userId: number, password: stri
 }
 
 export const sendMessage = (socket: Socket, userId: number, password: string, destinyId: number, message: string): void => {
-  console.log("Enviada: \n")
+  console.log(`SEND MESSAGE ${userId}:${password}:${destinyId}:${message}`)
 
   socket.write(`SEND MESSAGE ${userId}:${password}:${destinyId}:${message}`);
 }
