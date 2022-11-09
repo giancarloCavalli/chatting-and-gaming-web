@@ -15,10 +15,10 @@ export const resolve = async (request: IncomingMessage, response: ServerResponse
 
   switch (request.method) {
     case 'GET': {
-      const users = await TCPSocketService.getUsers(tcpSocket, Number(userid), password)
+      const players = await TCPSocketService.getPlayers(tcpSocket, Number(userid), password)
 
       response.writeHead(200);
-      response.end(`Retrieved user: ${users}`);
+      response.end(`Retrieved players: ${players}`);
       break;
     }
   

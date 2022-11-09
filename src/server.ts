@@ -1,12 +1,13 @@
-import { IncomingMessage, ServerResponse, createServer } from "http";
-
 require('dotenv').config()
+
+import { IncomingMessage, ServerResponse, createServer } from "http";
 
 import * as TCPSocketService from "./services/tcp.service";
 import * as UDPSocketService from "./services/udp.service";
 
 import * as MessageController from './controllers/message.controller'
 import * as UserController from './controllers/user.controller'
+import * as PlayerController from './controllers/player.controller'
 
 const TCP_PORT = Number(process.env.TCP_PORT)
 
@@ -31,6 +32,7 @@ const requestListener = async function (request: IncomingMessage, response: Serv
       break;
 
     case '/players':
+      await PlayerController.resolve(request, response, tcpSocket)
 
       break;
 
@@ -38,7 +40,7 @@ const requestListener = async function (request: IncomingMessage, response: Serv
       await UserController.resolve(request, response, tcpSocket)
       break;
 
-    case '/cards':
+    case '/card':
       
       break;
   

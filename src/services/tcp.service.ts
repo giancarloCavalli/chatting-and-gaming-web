@@ -47,6 +47,14 @@ export const getUsers = async (tcpSocket: Socket, userId: number, password: stri
   return socketData
 }
 
+export const getPlayers = async (tcpSocket: Socket, userId: number, password: string) => {
+
+  tcpSocket.write(`GET PLAYERS ${userId}:${password}`);
+  await resolveAfterXMilliseconds(30);
+  
+  return socketData
+}
+
 export const sendMessage = (tcpSocket: Socket, userId: number, password: string, destinyId: number, message: string): void => {
   console.log(`SEND MESSAGE ${userId}:${password}:${destinyId}:${message}`)
 
