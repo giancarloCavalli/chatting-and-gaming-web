@@ -61,6 +61,14 @@ export const sendMessage = (tcpSocket: Socket, userId: number, password: string,
   tcpSocket.write(`SEND MESSAGE ${userId}:${password}:${destinyId}:${message}`);
 }
 
+export const getCard = async (tcpSocket: Socket, userId: number, password: string) => {
+
+  tcpSocket.write(`GET CARD ${userId}:${password}`);
+  await resolveAfterXMilliseconds(30);
+  
+  return socketData
+}
+
 function resolveAfterXMilliseconds(x: number) {
   return new Promise(resolve => {
     setTimeout(() => {

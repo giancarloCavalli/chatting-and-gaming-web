@@ -8,6 +8,8 @@ import * as UDPSocketService from "./services/udp.service";
 import * as MessageController from './controllers/message.controller'
 import * as UserController from './controllers/user.controller'
 import * as PlayerController from './controllers/player.controller'
+import * as CardController from './controllers/card.controller'
+import * as GameController from './controllers/game.controller'
 
 const TCP_PORT = Number(process.env.TCP_PORT)
 
@@ -26,28 +28,48 @@ const tcpSocket = TCPSocketService.createConnection(TCP_PORT, TCP_HOST)
 const udpSocket = UDPSocketService.createSocket()
 
 const requestListener = async function (request: IncomingMessage, response: ServerResponse) {
-  switch (request.url) {
-    case '/messages':
-      await MessageController.resolve(request, response, tcpSocket, udpSocket)
-      break;
-
-    case '/players':
-      await PlayerController.resolve(request, response, tcpSocket)
-
-      break;
-
-    case '/users':
-      await UserController.resolve(request, response, tcpSocket)
-      break;
-
-    case '/card':
-      
-      break;
+  try{
+    switch (request.url) {
+      case '/messages':
+        await MessageController.resolve(request, response, tcpSocket, udpSocket)
+        break;
   
-    default:
-      response.writeHead(400);
-      response.end('Resource not found');
-      break;
+      case '/players':
+        await PlayerController.resolve(request, response, tcpSocket)
+  
+        break;
+  
+      case '/users':
+        await UserController.resolve(request, response, tcpSocket)
+  
+        break;
+        
+      case '/card':
+        await CardController.resolve(request, response, tcpSocket)
+        
+        break;
+        
+      case '/game':
+        await GameController.resolve(request, response, udpSocket)
+          .catch(e => {
+            "Passei aqui"
+          }) 
+        
+        break;
+    
+      default:
+        response.writeHead(400);
+        response.end('Resource not found');
+        break;
+    }
+  } catch(exception) {
+    const error = {
+      status: 400,
+      message: (exception as Error).message
+    }
+
+    response.writeHead(error.status);
+    response.end(JSON.stringify(error))
   }
   
 };
