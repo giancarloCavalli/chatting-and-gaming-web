@@ -2,7 +2,7 @@ import { Socket } from "net";
 
 const net = require('net');
 
-let message = ''
+let socketData = ''
 
 export const createConnection = (port: number, host: string): Socket => {
   const tcpSocket: Socket = net.createConnection(port, host)
@@ -11,8 +11,8 @@ export const createConnection = (port: number, host: string): Socket => {
   
   tcpSocket
     .on('data', (data: Buffer) => {
-      message = data.toString('utf-8')
-      console.log('RESPONSE: ', message);
+      socketData = data.toString('utf-8')
+      console.log('RESPONSE: ', socketData);
     })
     
     .on('connect', () => {
@@ -30,13 +30,21 @@ export const createConnection = (port: number, host: string): Socket => {
     return tcpSocket
 }
 
-export const readMessage = async (tcpSocket: Socket, userId: number, password: string) => {
+export const getMessage = async (tcpSocket: Socket, userId: number, password: string) => {
   console.log("Mensagens recebidas: \n")
 
   tcpSocket.write(`GET MESSAGE ${userId}:${password}`);
   await resolveAfterXMilliseconds(30);
   
-  return message
+  return socketData
+}
+
+export const getUsers = async (tcpSocket: Socket, userId: number, password: string) => {
+
+  tcpSocket.write(`GET USERS ${userId}:${password}`);
+  await resolveAfterXMilliseconds(30);
+  
+  return socketData
 }
 
 export const sendMessage = (tcpSocket: Socket, userId: number, password: string, destinyId: number, message: string): void => {

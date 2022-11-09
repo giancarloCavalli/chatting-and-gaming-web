@@ -23,7 +23,7 @@ export const createSocket = (): Socket => {
   return client
 }
 
-const sendMessage = (clientSocket: Socket, message: string): void => {
+export const sendMessage = (clientSocket: Socket, userId: string, password: string, destinyId: string, message: string): void => {
   const UDP_PORT: number = Number(process.env.UDP_PORT);
   const UDP_HOST: string | undefined = process.env.UDP_HOST
 
@@ -31,11 +31,13 @@ const sendMessage = (clientSocket: Socket, message: string): void => {
     throw 'Necessário configurar porta e host UDP'
   }
 
-  clientSocket.send(message, UDP_PORT, UDP_HOST, (error: Error | null) => {
+  const request = `SEND MESSAGE ${userId}:${password}:${destinyId}:${message}`
+
+  clientSocket.send(request, UDP_PORT, UDP_HOST, (error: Error | null) => {
     if(error){
       clientSocket.close();
     }else{
-      console.log(`'${message}' sent!`);
+      console.log(`'${request}' sent!`);
     }
   });
 

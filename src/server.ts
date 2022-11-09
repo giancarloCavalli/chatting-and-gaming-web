@@ -4,7 +4,9 @@ require('dotenv').config()
 
 import * as TCPSocketService from "./services/tcp.service";
 import * as UDPSocketService from "./services/udp.service";
+
 import * as MessageController from './controllers/message.controller'
+import * as UserController from './controllers/user.controller'
 
 const TCP_PORT = Number(process.env.TCP_PORT)
 
@@ -25,7 +27,7 @@ const udpSocket = UDPSocketService.createSocket()
 const requestListener = async function (request: IncomingMessage, response: ServerResponse) {
   switch (request.url) {
     case '/messages':
-      await MessageController.resolve(request, response, tcpSocket)
+      await MessageController.resolve(request, response, tcpSocket, udpSocket)
       break;
 
     case '/players':
@@ -33,7 +35,7 @@ const requestListener = async function (request: IncomingMessage, response: Serv
       break;
 
     case '/users':
-
+      await UserController.resolve(request, response, tcpSocket)
       break;
 
     case '/cards':

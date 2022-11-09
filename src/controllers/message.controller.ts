@@ -1,12 +1,14 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { Socket } from "net";
+import { Socket as DgramSocket  } from "dgram";
 
 import { Headers } from "../types/headers";
 import { Message } from "../types/message";
 
-import * as SocketService from "../services/tcp.service";
+import * as TCPSocketService from "../services/tcp.service";
+import * as UDPSocketService from "../services/udp.service";
 
-export const resolve = async (request: IncomingMessage, response: ServerResponse, socket: Socket) => {
+export const resolve = async (request: IncomingMessage, response: ServerResponse, tcpSocket: Socket, udpSocket: DgramSocket) => {
   const { userid, password } = request.headers as Headers
 
   if (!userid || !password) {
@@ -17,7 +19,7 @@ export const resolve = async (request: IncomingMessage, response: ServerResponse
 
   switch (request.method) {
     case 'GET': {
-      const message = await SocketService.readMessage(socket, Number(userid), password)
+      const message = await TCPSocketService.getMessage(tcpSocket, Number(userid), password)
 
       response.writeHead(200);
       response.end(`Received message: ${message}`);
@@ -33,7 +35,7 @@ export const resolve = async (request: IncomingMessage, response: ServerResponse
       request.on('end', () => {
           const { destinyId, message }: Message = JSON.parse(body)
 
-          SocketService.sendMessage(socket, Number(userid), password, Number(destinyId), message)
+          UDPSocketService.sendMessage(udpSocket, userid, password, destinyId, message)
 
           response.writeHead(201); 
           response.end('Created'); 
