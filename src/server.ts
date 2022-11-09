@@ -1,16 +1,31 @@
 import { IncomingMessage, ServerResponse, createServer } from "http";
 
-import * as SocketService from "./services/socket.service";
+require('dotenv').config()
+
+import * as TCPSocketService from "./services/tcp.service";
+import * as UDPSocketService from "./services/udp.service";
 import * as MessageController from './controllers/message.controller'
 
-const port = 1012;
-const host = 'larc.inf.furb.br'
-const socket = SocketService.createConnection(port, host)
+const TCP_PORT = Number(process.env.TCP_PORT)
+
+if (TCP_PORT === 0) {
+  throw 'Necessário configurar uma porta TCP para iniciar o sistema'
+}
+
+const TCP_HOST: string | undefined = process.env.TCP_HOST
+
+if (!TCP_HOST) {
+  throw 'Necessário configurar um host TCP para iniciar o sistema'
+}
+
+const tcpSocket = TCPSocketService.createConnection(TCP_PORT, TCP_HOST)
+
+const udpSocket = UDPSocketService.createSocket()
 
 const requestListener = async function (request: IncomingMessage, response: ServerResponse) {
   switch (request.url) {
     case '/messages':
-      await MessageController.resolve(request, response, socket)
+      await MessageController.resolve(request, response, tcpSocket)
       break;
 
     case '/players':

@@ -4,7 +4,7 @@ import { Socket } from "net";
 import { Headers } from "../types/headers";
 import { Message } from "../types/message";
 
-import * as SocketService from "../services/socket.service";
+import * as SocketService from "../services/tcp.service";
 
 export const resolve = async (request: IncomingMessage, response: ServerResponse, socket: Socket) => {
   const { userid, password } = request.headers as Headers
