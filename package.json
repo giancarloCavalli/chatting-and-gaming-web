@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Chatting and gaming app",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "./src/docs/swagger/index.html && nodemon",
     "build": "rimraf ./build && tsc",
-    "start": "yarn build && ./src/docs/swagger/index.html && node ./build/server.js"
+    "start": "yarn build && node ./build/server.js"
   },
   "main": "index.js",
   "repository": "https://github.com/giancarloCavalli/chatting-and-gaming-web.git",
