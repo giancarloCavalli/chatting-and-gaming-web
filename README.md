@@ -14,6 +14,16 @@
 - [Node](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/)
 
+### Configuration
+
+Add a **.env** file to the root folder, so node can read the environment variables.\
+Configure it with the following variables:
+
+TCP_PORT="" \
+TCP_HOST="" \
+UDP_PORT="" \
+UDP_HOST=""
+
 ### Commands
 
 In the project directory, to install the project dependencies first, run:
