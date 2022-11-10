@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from "http";
 import { Socket as TCPSocket } from "net";
 
 import * as TCPSocketService from "../services/tcp.service";
+
 import { Headers } from "../types/headers";
 
 export const resolve = async (request: IncomingMessage, response: ServerResponse, tcpSocket: TCPSocket) => {
@@ -15,7 +16,12 @@ export const resolve = async (request: IncomingMessage, response: ServerResponse
 
   switch (request.method) {
     case 'GET': {
-      const users = await TCPSocketService.getUsers(tcpSocket, Number(userid), password)
+
+      setInterval(async () => {
+        console.log("Get users recursivo")
+        await TCPSocketService.getUsers(tcpSocket, Number(userid), password)
+      }, 6000);
+      const users = await 
 
       response.writeHead(200);
       response.end(`Retrieved user: ${users}`);
@@ -25,5 +31,4 @@ export const resolve = async (request: IncomingMessage, response: ServerResponse
     default:
       break;
   }
-
 }
